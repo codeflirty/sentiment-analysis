@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Twitter Sentiment Analysis Project</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{{ url_for('static',filename='styles/mystyle.css') }}">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script src="http://use.fontawsome.com/releases/v5.0.8/js/all.js"></script>
+	<script src="{{ url_for('static',filename='js/myscript.js') }}"></script>
+
+</head>
+<body>
+  <center><h1 class="m-5" style="color: white;"><strong>Twitter Sentiment Analysis</strong></h1></center>
+  
+  <div class="container mt-5 mb-5">
+		<div class="row">
+
+			<div class="card col-lg-7 text-center" style="background: rgba(0, 0, 0, 0.7);">
+				<h1 class="m-5" style="color: white;"><strong>Average of Last 30 Seconds</strong></h1>
+				
+				<div style="display:inline-block">
+				<div style="width: 15%; height: 100px; display:inline-block; background: white; margin-right: 1%; margin-bottom: 5px; border-radius: 50px; padding: 10px;">
+					<h6 class="modal-title" style="text-align: center, height: 100px; margin-bottom: 10px; color: rgba(0, 0, 0, 0.7);"><strong>Anger</strong></h6>
+					<h4 id="c1" class="modal-title" style="text-align: center, height; 100px; color: rgba(0, 0, 0, 0.7);"><strong></strong></h4>
+				</div>
+				
+				<div style="width: 15%; height: 100px; display:inline-block; background: white; margin-right: 1%; margin-bottom: 5px; border-radius: 50px; padding: 10px;">
+					<h6 class="modal-title" style="text-align: center, height: 100px; margin-bottom: 10px; color: rgba(0, 0, 0, 0.7);"><strong>Love</strong></h6>
+					<h4 id="c2" class="modal-title" style="text-align: center, height; 100px; color: rgba(0, 0, 0, 0.7);"><strong></strong></h4>
+				</div>
+				
+				<div style="width: 15%; height: 100px; display:inline-block; background: white; margin-right: 1%; margin-bottom: 5px; border-radius: 50px; padding: 10px;">
+					<h6 class="modal-title" style="text-align: center, height: 100px; margin-bottom: 10px; color: rgba(0, 0, 0, 0.7);"><strong>Fear</strong></h6>
+					<h4 id="c3" class="modal-title" style="text-align: center, height; 100px; color: rgba(0, 0, 0, 0.7);"><strong></strong></h4>
+				</div>
+				
+				<div style="width: 15%; height: 100px; display:inline-block; background: white; margin-right: 1%; margin-bottom: 5px; border-radius: 50px; padding: 10px;">
+					<h6 class="modal-title" style="text-align: center, height: 100px; margin-bottom: 10px; color: rgba(0, 0, 0, 0.7);"><strong>Happy</strong></h6>
+					<h4 id="c4" class="modal-title" style="text-align: center, height; 100px; color: rgba(0, 0, 0, 0.7);"><strong></strong></h4>
+				</div>
+				
+				<div style="width: 15%; height: 100px; display:inline-block; background: white; margin-right: 1%; margin-bottom: 5px; border-radius: 50px; padding: 10px;">
+					<h6 class="modal-title" style="text-align: center, height: 100px; margin-bottom: 10px; color: rgba(0, 0, 0, 0.7);"><strong>Sadness</strong></h6>
+					<h4 id="c5" class="modal-title" style="text-align: center, height; 100px; color: rgba(0, 0, 0, 0.7);"><strong></strong></h4>
+				</div>
+				
+				<div style="width: 15%; height: 100px; display:inline-block; background: white; margin-right: 1%; margin-bottom: 50px; border-radius: 50px; padding: 10px;">
+					<h6 class="modal-title" style="text-align: center, height: 100px; margin-bottom: 10px; color: rgba(0, 0, 0, 0.7);"><strong>Surprise</strong></h6>
+					<h4 id="c6" class="modal-title" style="text-align: center, height; 100px; color: rgba(0, 0, 0, 0.7);"><strong></strong></h4>
+				</div>
+				
+				</div>
+				
+			</div>
+			
+			<div class="col-lg-5 text-center" style="background: rgb(156, 142, 142,0.7);">
+				<div>
+					<h2 class="m-5" style="color:white"><strong>Extracted Tweet</strong></h2>
+				</div>
+				
+				<div>
+					<h5 id=c7 class="m-5" style="color:white"><strong></strong></h5>
+				</div>
+
+				
+			</div>
+		</div>
+	</div>
+	
+	
+  
+  <script>
+    var eventSource = new EventSource("/listen")
+    
+    eventSource.addEventListener("message", function(e) {
+      console.log(e.data)
+    }, false)
+
+    eventSource.addEventListener("online", function(e) {
+      console.log(e.data.color)
+      data = JSON.parse(e.data)
+      document.querySelector("#c1").innerText = data.c1
+	  document.querySelector("#c2").innerText = data.c2
+	  document.querySelector("#c3").innerText = data.c3
+	  document.querySelector("#c4").innerText = data.c4
+	  document.querySelector("#c5").innerText = data.c5
+	  document.querySelector("#c6").innerText = data.c6
+	  document.querySelector("#c7").innerText = data.c7
+      document.querySelector("body").style.backgroundColor= data.color
+    }, true)
+
+  </script>
+
+</body>
+</html>
